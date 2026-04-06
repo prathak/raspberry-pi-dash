@@ -12,42 +12,32 @@ import PhotoSlideshow from "@/components/PhotoSlideshow";
 export default function Dashboard() {
   return (
     <QueryProviders>
-      <div className="dashboard-bg min-h-screen p-6">
-        {/* Header with Clock */}
-        <header className="mb-6">
-          <Clock />
-        </header>
+      <div className="relative h-screen overflow-hidden bg-black">
+        {/* Full screen photo background */}
+        <div className="fixed inset-0 z-0">
+          <PhotoSlideshow showTime={false} />
+        </div>
 
-        {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Weather - Compact */}
-          <div className="lg:col-span-1">
-            <Weather />
+        {/* Clock at top, 10% height */}
+        <div className="fixed top-0 left-1/2 -translate-x-1/2 z-20 w-full px-4">
+          <Clock showDate={false} />
+        </div>
+
+        {/* Content - starts after clock */}
+        <div className="relative z-10 pt-[10vh] px-4 h-[90vh] flex flex-col">
+          {/* Weather row - 50% of available space */}
+          <div className="flex-1 mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 h-full">
+              <div className="h-full"><Weather /></div>
+              <div className="h-full"><GroceryList /></div>
+              <div className="h-full"><TubeSchedule /></div>
+              <div className="h-full"><MealPlan /></div>
+            </div>
           </div>
 
-          {/* Grocery List */}
-          <div className="lg:col-span-1">
-            <GroceryList />
-          </div>
-
-          {/* Calendar - Full width on mobile, spans both rows on larger */}
-          <div className="lg:col-span-2 xl:col-span-2 row-span-2">
+          {/* Calendar - 40% of 90vh */}
+          <div className="h-[36vh]">
             <Calendar />
-          </div>
-
-          {/* Tube Schedule */}
-          <div className="xl:col-span-1">
-            <TubeSchedule />
-          </div>
-
-          {/* Meal Plan */}
-          <div className="xl:col-span-1">
-            <MealPlan />
-          </div>
-
-          {/* Photo Slideshow - Full width */}
-          <div className="lg:col-span-4">
-            <PhotoSlideshow />
           </div>
         </div>
       </div>

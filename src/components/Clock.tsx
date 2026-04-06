@@ -26,12 +26,12 @@ export default function Clock({ showDate = true }: { showDate?: boolean }) {
   });
 
   return (
-    <div className="text-center">
-      <h1 className="text-6xl md:text-7xl lg:text-8xl font-light text-white tracking-tight">
+    <div className="text-center py-1">
+      <h1 className="text-4xl md:text-5xl font-light text-white tracking-tight drop-shadow-lg">
         {time}
       </h1>
       {showDate && (
-        <p className="text-lg md:text-xl text-white/80 mt-2 font-light">
+        <p className="text-sm md:text-base text-white/70 mt-1 font-light drop-shadow-sm">
           {date}
         </p>
       )}

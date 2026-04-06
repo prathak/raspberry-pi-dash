@@ -51,14 +51,14 @@ export default function PhotoSlideshow({ showTime }: { showTime?: boolean }) {
   });
 
   return (
-    <div className="w-full h-full relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="fixed inset-0 z-0 w-full h-full overflow-hidden bg-black">
       {/* Photos */}
       {photos.length > 0 && photos.map((photo, index) => {
         const isActive = index === currentIndex;
         return (
           <div
             key={photo.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
+            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${
               isActive ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -72,19 +72,7 @@ export default function PhotoSlideshow({ showTime }: { showTime?: boolean }) {
       })}
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50" />
-
-      {/* Time overlay */}
-      {showTime && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <p className="text-6xl md:text-7xl lg:text-8xl font-light text-white tracking-tight drop-shadow-2xl">
-            {time}
-          </p>
-          <p className="text-lg md:text-xl text-white/90 font-light mt-2 drop-shadow-lg">
-            {date}
-          </p>
-        </div>
-      )}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/80" />
     </div>
   );
 }
