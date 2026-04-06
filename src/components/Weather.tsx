@@ -122,8 +122,8 @@ export default function Weather() {
                 <span className="text-xs text-white/50 uppercase">{day.day}</span>
                 <span className="text-2xl">{getWeatherIcon(day.condition)}</span>
                 <div className="flex gap-1 text-xs">
-                  <span className="text-white font-medium">{day.high}°</span>
-                  <span className="text-white/50">{day.low}°</span>
+                  <span className="text-white font-medium">{Math.round(day.high)}°</span>
+                  <span className="text-white/50">{Math.round(day.low)}°</span>
                 </div>
               </div>
             ))}

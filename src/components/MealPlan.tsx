@@ -32,41 +32,41 @@ export default function MealPlan() {
 
   const MealItem = ({ label, meal }: { label: string; meal?: string }) => (
     meal ? (
-      <div className="flex justify-between items-center py-2 border-b border-white/10 last:border-0">
-        <span className="text-xs text-white/50 uppercase">{label}</span>
-        <span className="text-white font-medium text-sm">{meal}</span>
+      <div className="flex justify-between items-center py-1 border-b border-white/10 last:border-0">
+        <span className="text-[10px] text-white/50 uppercase">{label}</span>
+        <span className="text-white text-sm truncate">{meal}</span>
       </div>
     ) : null
   );
 
   return (
-    <div className="glass-card p-6 h-full">
-      <div className="flex items-center gap-3 mb-4">
-        <Utensils className="w-6 h-6 text-white/80" />
-        <h2 className="text-xl font-semibold text-white">Meal Plan</h2>
+    <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
+      <div className="flex items-center gap-2 mb-2 flex-shrink-0">
+        <Utensils className="w-4 h-4 text-white/80" />
+        <h2 className="text-sm font-semibold text-white">Meal Plan</h2>
       </div>
 
       {isLoading && (
-        <div className="text-white/60 text-center py-8">Loading meal plan...</div>
+        <div className="text-white/60 text-center py-4 text-xs">Loading...</div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 text-red-400 py-8">
-          <AlertCircle className="w-5 h-5" />
-          <span>Failed to load meal plan</span>
+        <div className="flex items-center gap-2 text-red-400 py-2">
+          <AlertCircle className="w-3 h-3" />
+          <span className="text-xs">Failed to load</span>
         </div>
       )}
 
       {!isLoading && !error && meals.length === 0 && (
-        <div className="text-white/60 text-center py-8">No meal plan set</div>
+        <div className="text-white/60 text-center py-4 text-xs">No meal plan</div>
       )}
 
       {!isLoading && !error && meals.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-2 overflow-y-auto flex-1 custom-scrollbar">
           {/* Today */}
-          <div className="p-4 rounded-lg bg-white/5">
-            <p className="text-sm text-white/80 font-semibold mb-2 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-400" />
+          <div className="rounded-lg bg-white/5 p-2">
+            <p className="text-xs text-white/80 font-semibold mb-1 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
               Today ({days[currentDayIndex]})
             </p>
             <MealItem label="Breakfast" meal={todayMeal.breakfast} />
@@ -78,8 +78,8 @@ export default function MealPlan() {
           </div>
 
           {/* Tomorrow */}
-          <div className="p-4 rounded-lg bg-white/5">
-            <p className="text-sm text-white/80 font-semibold mb-2">
+          <div className="rounded-lg bg-white/5 p-2">
+            <p className="text-xs text-white/80 font-semibold mb-1">
               Tomorrow ({days[tomorrowIndex]})
             </p>
             <MealItem label="Breakfast" meal={tomorrowMeal.breakfast} />

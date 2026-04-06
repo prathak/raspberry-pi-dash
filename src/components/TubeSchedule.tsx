@@ -59,8 +59,8 @@ export default function TubeSchedule() {
   };
 
   return (
-    <div className="glass-card p-3 h-full">
-      <div className="flex items-center gap-2 mb-2">
+    <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
+      <div className="flex items-center gap-2 mb-2 flex-shrink-0">
         <TrainFront className="w-4 h-4 text-white/80" />
         <h2 className="text-base font-semibold text-white">Tube Departures</h2>
       </div>
@@ -80,7 +80,7 @@ export default function TubeSchedule() {
         <div className="text-white/60 text-center py-4 text-sm">No departures</div>
       )}
 
-      <div className="space-y-2">
+      <div className="space-y-2 overflow-y-auto flex-1 custom-scrollbar">
         {departures.slice(0, 8).map((departure, index) => (
           <div
             key={`${departure.station}-${departure.line}-${departure.destination}-${index}`}
