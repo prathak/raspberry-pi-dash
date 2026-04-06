@@ -18,13 +18,13 @@ export default function Dashboard() {
           <PhotoSlideshow showTime={false} />
         </div>
 
-        {/* Clock at top, 10% height */}
-        <div className="fixed top-0 left-1/2 -translate-x-1/2 z-20 w-full px-4">
-          <Clock showDate={false} />
-        </div>
+        {/* Content container */}
+        <div className="relative z-10 px-4 h-full flex flex-col">
+          {/* Clock at top */}
+          <div className="pt-4 pb-2">
+            <Clock showDate={true} />
+          </div>
 
-        {/* Content - starts after clock */}
-        <div className="relative z-10 pt-[10vh] px-4 h-[90vh] flex flex-col">
           {/* Weather row - 50% of available space */}
           <div className="flex-1 mb-3">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 h-full">

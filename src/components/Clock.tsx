@@ -26,7 +26,7 @@ export default function Clock({ showDate = true }: { showDate?: boolean }) {
   });
 
   return (
-    <div className="text-center py-1">
+    <div className="text-center">
       <h1 className="text-4xl md:text-5xl font-light text-white tracking-tight drop-shadow-lg">
         {time}
       </h1>
