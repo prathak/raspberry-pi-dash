@@ -85,105 +85,108 @@ export default function Calendar() {
   const twoWeekEvents = getTwoWeekEvents();
 
   return (
-    <div className="glass-card p-4 h-full">
-      <div className="flex items-center gap-2 mb-3">
+    <div className="glass-card p-4 h-full flex flex-col overflow-hidden">
+      <div className="flex items-center gap-2 mb-3 flex-shrink-0">
         <CalendarIcon className="w-5 h-5 text-white/80" />
         <h2 className="text-lg font-semibold text-white">Calendar</h2>
       </div>
 
       {isLoading && (
-        <div className="text-white/60 text-center py-8">Loading events...</div>
+        <div className="text-white/60 text-center py-4">Loading events...</div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 text-red-400 py-8">
+        <div className="flex items-center gap-2 text-red-400 py-4">
           <AlertCircle className="w-5 h-5" />
           <span>Failed to load calendar events</span>
         </div>
       )}
 
       {!isLoading && !error && (
-        <div className="space-y-2">
-          {/* Week 1 */}
-          <div className="grid grid-cols-7 gap-1">
-            {twoWeekEvents.slice(0, 7).map((day) => (
-              <div
-                key={`week1-${day.date.toISOString()}`}
-                className={`flex flex-col ${
-                  day.isToday ? "bg-white/15" : "bg-white/5"
-                } rounded overflow-hidden`}
-              >
-                {/* Day Header */}
-                <div className="text-center py-1 px-1 border-b border-white/10 flex-shrink-0">
-                  <span className="text-[10px] text-white/50 uppercase">{day.dayName}</span>
-                  <p className={`text-sm font-semibold ${day.isToday ? "text-white" : "text-white/70"}`}>
-                    {day.dayNumber}
-                  </p>
-                </div>
-
-                {/* Events */}
-                <div className="flex-1 overflow-hidden p-0.5 space-y-0.5">
-                  {day.events.map((event) => (
-                    <div
-                      key={event.id}
-                      className={`p-0.5 rounded border text-[9px] ${getCalendarColor(event.calendar)}`}
-                    >
-                      <p className="font-medium text-white truncate">{event.title}</p>
-                      <p className="text-white/50">
-                        {formatTime(event.start)}
+        <div className="flex-1 flex flex-col overflow-y-auto custom-scrollbar">
+          {/* Two equal height rows */}
+          <div className="flex flex-col h-full">
+            {/* Week 1 */}
+            <div className="flex-1 min-h-0">
+              <div className="grid grid-cols-7 gap-1 h-full">
+                {twoWeekEvents.slice(0, 7).map((day) => (
+                  <div
+                    key={`week1-${day.date.toISOString()}`}
+                    className={`flex flex-col h-full ${
+                      day.isToday ? "bg-white/15" : "bg-white/5"
+                    } rounded overflow-hidden`}
+                  >
+                    {/* Day Header */}
+                    <div className="text-center py-1 px-1 border-b border-white/10 flex-shrink-0">
+                      <span className="text-[10px] text-white/50 uppercase">{day.dayName}</span>
+                      <p className={`text-sm font-semibold ${day.isToday ? "text-white" : "text-white/70"}`}>
+                        {day.dayNumber}
                       </p>
-                      {event.location && (
-                        <p className="text-white/40 truncate">{event.location}</p>
+                    </div>
+
+                    {/* Events */}
+                    <div className="flex-1 overflow-y-auto p-0.5 space-y-0.5 min-h-0">
+                      {day.events.map((event) => (
+                        <div
+                          key={event.id}
+                          className={`p-0.5 rounded border text-[9px] ${getCalendarColor(event.calendar)}`}
+                        >
+                          <p className="font-medium text-white truncate">{event.title}</p>
+                          <p className="text-white/50 text-[9px]">{formatTime(event.start)}</p>
+                          {event.location && (
+                            <p className="text-white/40 truncate text-[9px]">{event.location}</p>
+                          )}
+                        </div>
+                      ))}
+                      {day.events.length === 0 && (
+                        <div className="text-white/20 text-[9px] text-center py-0.5">-</div>
                       )}
                     </div>
-                  ))}
-                  {day.events.length === 0 && (
-                    <div className="text-white/20 text-[9px] text-center py-0.5">-</div>
-                  )}
-                </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
 
-          {/* Week 2 */}
-          <div className="grid grid-cols-7 gap-1">
-            {twoWeekEvents.slice(7, 14).map((day) => (
-              <div
-                key={`week2-${day.date.toISOString()}`}
-                className={`flex flex-col ${
-                  day.isToday ? "bg-white/15" : "bg-white/5"
-                } rounded overflow-hidden`}
-              >
-                {/* Day Header */}
-                <div className="text-center py-1 px-1 border-b border-white/10 flex-shrink-0">
-                  <span className="text-[10px] text-white/50 uppercase">{day.dayName}</span>
-                  <p className={`text-sm font-semibold ${day.isToday ? "text-white" : "text-white/70"}`}>
-                    {day.dayNumber}
-                  </p>
-                </div>
-
-                {/* Events */}
-                <div className="flex-1 overflow-hidden p-0.5 space-y-0.5">
-                  {day.events.map((event) => (
-                    <div
-                      key={event.id}
-                      className={`p-0.5 rounded border text-[9px] ${getCalendarColor(event.calendar)}`}
-                    >
-                      <p className="font-medium text-white truncate">{event.title}</p>
-                      <p className="text-white/50">
-                        {formatTime(event.start)}
+            {/* Week 2 */}
+            <div className="flex-1 min-h-0">
+              <div className="grid grid-cols-7 gap-1 h-full">
+                {twoWeekEvents.slice(7, 14).map((day) => (
+                  <div
+                    key={`week2-${day.date.toISOString()}`}
+                    className={`flex flex-col h-full ${
+                      day.isToday ? "bg-white/15" : "bg-white/5"
+                    } rounded overflow-hidden`}
+                  >
+                    {/* Day Header */}
+                    <div className="text-center py-1 px-1 border-b border-white/10 flex-shrink-0">
+                      <span className="text-[10px] text-white/50 uppercase">{day.dayName}</span>
+                      <p className={`text-sm font-semibold ${day.isToday ? "text-white" : "text-white/70"}`}>
+                        {day.dayNumber}
                       </p>
-                      {event.location && (
-                        <p className="text-white/40 truncate">{event.location}</p>
+                    </div>
+
+                    {/* Events */}
+                    <div className="flex-1 overflow-y-auto p-0.5 space-y-0.5 min-h-0">
+                      {day.events.map((event) => (
+                        <div
+                          key={event.id}
+                          className={`p-0.5 rounded border text-[9px] ${getCalendarColor(event.calendar)}`}
+                        >
+                          <p className="font-medium text-white truncate">{event.title}</p>
+                          <p className="text-white/50 text-[9px]">{formatTime(event.start)}</p>
+                          {event.location && (
+                            <p className="text-white/40 truncate text-[9px]">{event.location}</p>
+                          )}
+                        </div>
+                      ))}
+                      {day.events.length === 0 && (
+                        <div className="text-white/20 text-[9px] text-center py-0.5">-</div>
                       )}
                     </div>
-                  ))}
-                  {day.events.length === 0 && (
-                    <div className="text-white/20 text-[9px] text-center py-0.5">-</div>
-                  )}
-                </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       )}

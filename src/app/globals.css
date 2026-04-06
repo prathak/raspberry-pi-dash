@@ -105,6 +105,18 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* Equal height columns */
+.equal-height-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.equal-height-col .flex-1 {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
