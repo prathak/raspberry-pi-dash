@@ -51,7 +51,7 @@ export default function PhotoSlideshow({ showTime }: { showTime?: boolean }) {
   });
 
   return (
-    <div className="fixed inset-0 z-0 w-full h-full overflow-hidden bg-black">
+    <div className="w-full h-full relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Photos */}
       {photos.length > 0 && photos.map((photo, index) => {
         const isActive = index === currentIndex;
@@ -72,7 +72,7 @@ export default function PhotoSlideshow({ showTime }: { showTime?: boolean }) {
       })}
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40" />
     </div>
   );
 }

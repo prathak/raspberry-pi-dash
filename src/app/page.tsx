@@ -7,19 +7,13 @@ import GroceryList from "@/components/GroceryList";
 import TubeSchedule from "@/components/TubeSchedule";
 import MealPlan from "@/components/MealPlan";
 import Weather from "@/components/Weather";
-import PhotoSlideshow from "@/components/PhotoSlideshow";
 
 export default function Dashboard() {
   return (
     <QueryProviders>
       <div className="relative h-screen overflow-hidden bg-black">
-        {/* Full screen photo background */}
-        <div className="fixed inset-0 z-0">
-          <PhotoSlideshow showTime={false} />
-        </div>
-
         {/* Content container */}
-        <div className="relative z-10 px-4 h-full flex flex-col">
+        <div className="px-4 h-full flex flex-col">
           {/* Clock at top */}
           <div className="pt-4 pb-2">
             <Clock showDate={true} />
