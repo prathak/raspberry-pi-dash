@@ -22,6 +22,7 @@ export default function Calendar() {
   const { data: events = [], error, isLoading } = useQuery({
     queryKey: ["calendar"],
     queryFn: fetchCalendarEvents,
+    refetchInterval: 5 * 60 * 1000,
   });
 
   const formatTime = (dateString: string) => {
@@ -55,11 +56,10 @@ export default function Calendar() {
     return "border-purple-400/50 bg-purple-500/20";
   };
 
-  // Group events by day for the week
   const getWeeklyEvents = () => {
     const today = new Date();
     const weekStart = new Date(today);
-    weekStart.setDate(today.getDate() - today.getDay()); // Start from Sunday
+    weekStart.setDate(today.getDate() - today.getDay());
 
     const days = Array.from({ length: 7 }, (_, i) => {
       const day = new Date(weekStart);
@@ -67,28 +67,28 @@ export default function Calendar() {
       return day;
     });
 
-    const eventsByDay = days.map((day) => {
+    return days.map((day) => {
       const dayStr = day.toDateString();
       return {
         date: day,
-        dayName: day.toLocaleDateString("en-GB", { weekday: "short" }),
+        dayName: getDayName(dayStr),
         dayNumber: day.getDate(),
-        monthName: day.toLocaleDateString("en-GB", { month: "short" }),
+        monthName: getMonthName(dayStr),
         isToday: day.toDateString() === today.toDateString(),
-        events: events.filter((e) => new Date(e.start).toDateString() === dayStr),
+        events: events
+          .filter((e) => new Date(e.start).toDateString() === dayStr)
+          .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()),
       };
     });
-
-    return eventsByDay;
   };
 
   const weeklyEvents = getWeeklyEvents();
 
   return (
-    <div className="glass-card p-6 h-full">
-      <div className="flex items-center gap-3 mb-4">
-        <CalendarIcon className="w-6 h-6 text-white/80" />
-        <h2 className="text-xl font-semibold text-white">This Week</h2>
+    <div className="glass-card p-4 h-full">
+      <div className="flex items-center gap-2 mb-3">
+        <CalendarIcon className="w-5 h-5 text-white/80" />
+        <h2 className="text-lg font-semibold text-white">This Week</h2>
       </div>
 
       {isLoading && (
@@ -103,33 +103,45 @@ export default function Calendar() {
       )}
 
       {!isLoading && !error && (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-2 h-[calc(100%-2rem)]">
           {weeklyEvents.map((day) => (
             <div
               key={day.date.toISOString()}
-              className={`flex flex-col items-center p-2 rounded-lg ${
+              className={`flex flex-col ${
                 day.isToday ? "bg-white/15" : "bg-white/5"
-              }`}
+              } rounded-lg overflow-hidden`}
             >
-              <span className="text-xs text-white/50 uppercase">{day.dayName}</span>
-              <span className={`text-lg font-semibold ${day.isToday ? "text-white" : "text-white/70"}`}>
-                {day.dayNumber}
-              </span>
-              <span className="text-xs text-white/40">{day.monthName}</span>
+              {/* Day Header */}
+              <div className="text-center py-2 px-1 border-b border-white/10 flex-shrink-0">
+                <span className="text-xs text-white/50 uppercase">{day.dayName}</span>
+                <p className={`text-lg font-semibold ${day.isToday ? "text-white" : "text-white/70"}`}>
+                  {day.dayNumber}
+                </p>
+                <span className="text-xs text-white/40">{day.monthName}</span>
+              </div>
 
-              <div className="w-full mt-2 space-y-1">
-                {day.events.slice(0, 3).map((event) => (
+              {/* Events - fills remaining space */}
+              <div className="flex-1 overflow-hidden p-1 space-y-1">
+                {day.events.map((event) => (
                   <div
                     key={event.id}
-                    className={`p-1.5 rounded border ${getCalendarColor(event.calendar)} cursor-pointer hover:bg-white/10 transition-glass`}
-                    title={`${event.title}\n${formatTime(event.start)} - ${formatTime(event.end)}`}
+                    className={`p-1.5 rounded border text-xs ${getCalendarColor(event.calendar)}`}
                   >
-                    <p className="text-xs text-white font-medium truncate">{event.title}</p>
-                    <p className="text-xs text-white/50">{formatTime(event.start)}</p>
+                    <p className="font-medium text-white leading-tight break-words line-clamp-2">
+                      {event.title}
+                    </p>
+                    <p className="text-white/50 mt-0.5 text-[10px]">
+                      {formatTime(event.start)}
+                    </p>
+                    {event.location && (
+                      <p className="text-white/40 mt-0.5 text-[9px] truncate">
+                        {event.location}
+                      </p>
+                    )}
                   </div>
                 ))}
-                {day.events.length > 3 && (
-                  <p className="text-xs text-white/40 text-center">+{day.events.length - 3} more</p>
+                {day.events.length === 0 && (
+                  <div className="text-white/20 text-xs text-center py-2">-</div>
                 )}
               </div>
             </div>

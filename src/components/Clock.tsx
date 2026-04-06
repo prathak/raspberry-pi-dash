@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function Clock() {
+export default function Clock({ showDate = true }: { showDate?: boolean }) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -26,13 +26,15 @@ export default function Clock() {
   });
 
   return (
-    <div className="text-center py-8">
-      <h1 className="text-7xl md:text-8xl lg:text-9xl font-light text-white tracking-tight">
+    <div className="text-center">
+      <h1 className="text-6xl md:text-7xl lg:text-8xl font-light text-white tracking-tight">
         {time}
       </h1>
-      <p className="text-xl md:text-2xl text-white/80 mt-2 font-light">
-        {date}
-      </p>
+      {showDate && (
+        <p className="text-lg md:text-xl text-white/80 mt-2 font-light">
+          {date}
+        </p>
+      )}
     </div>
   );
 }

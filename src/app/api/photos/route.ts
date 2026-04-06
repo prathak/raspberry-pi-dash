@@ -14,11 +14,11 @@ export async function GET() {
 
   try {
     if (!fs.existsSync(photosDir)) {
-      // Return mock photos if directory doesn't exist
+      // Return default photo - user's image or gradient background
       return NextResponse.json([
+        { id: "default", url: "/DSCF1633.jpg", alt: "Default photo" },
         { id: "1", url: "https://picsum.photos/1920/1080?random=1", alt: "Random photo 1" },
         { id: "2", url: "https://picsum.photos/1920/1080?random=2", alt: "Random photo 2" },
-        { id: "3", url: "https://picsum.photos/1920/1080?random=3", alt: "Random photo 3" },
       ]);
     }
 

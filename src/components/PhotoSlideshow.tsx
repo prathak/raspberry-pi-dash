@@ -1,8 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Image as ImageIcon, AlertCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface Photo {
   id: string;
@@ -16,73 +15,51 @@ async function fetchPhotos(): Promise<Photo[]> {
   return res.json();
 }
 
-export default function PhotoSlideshow() {
-  const { data: photos = [], error, isLoading } = useQuery({
+export default function PhotoSlideshow({ showTime }: { showTime?: boolean }) {
+  const { data: photos = [] } = useQuery({
     queryKey: ["photos"],
     queryFn: fetchPhotos,
+    refetchInterval: 60 * 1000,
   });
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     if (!photos || photos.length === 0) return;
-
     const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % photos.length);
-        setIsTransitioning(false);
-      }, 1000); // 1 second fade transition
-    }, 15000); // Change every 15 seconds
-
+      setCurrentIndex((prev) => (prev + 1) % photos.length);
+    }, 15000);
     return () => clearInterval(interval);
   }, [photos.length]);
 
-  if (isLoading) {
-    return (
-      <div className="glass-card p-6 h-64 flex items-center justify-center">
-        <div className="text-white/60">Loading photos...</div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-  if (error) {
-    return (
-      <div className="glass-card p-6 h-64 flex items-center justify-center">
-        <div className="flex items-center gap-2 text-red-400">
-          <AlertCircle className="w-5 h-5" />
-          <span>Failed to load photos</span>
-        </div>
-      </div>
-    );
-  }
+  const time = currentTime.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-  if (!photos || photos.length === 0) {
-    return (
-      <div className="glass-card p-6 h-64 flex items-center justify-center">
-        <div className="text-center text-white/60">
-          <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
-          <p>No photos configured</p>
-          <p className="text-sm mt-1">Add photos to /public/photos or configure a source</p>
-        </div>
-      </div>
-    );
-  }
+  const date = currentTime.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
-    <div className="glass-card overflow-hidden h-64 md:h-80 lg:h-96 relative">
-      {photos.map((photo, index) => {
+    <div className="w-full h-full relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Photos */}
+      {photos.length > 0 && photos.map((photo, index) => {
         const isActive = index === currentIndex;
-        const isNext = index === (currentIndex + 1) % photos.length;
-
-        if (!isActive && !isNext) return null;
-
         return (
           <div
             key={photo.id}
             className={`absolute inset-0 transition-opacity duration-1000 ${
-              isActive ? "opacity-100 z-10" : "opacity-0 z-0"
+              isActive ? "opacity-100" : "opacity-0"
             }`}
           >
             <img
@@ -90,26 +67,24 @@ export default function PhotoSlideshow() {
               alt={photo.alt || "Slideshow photo"}
               className="w-full h-full object-cover"
             />
-            {/* Gradient overlay for better text readability if needed */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           </div>
         );
       })}
 
-      {/* Photo indicators */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {photos.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex
-                ? "bg-white w-6"
-                : "bg-white/40 hover:bg-white/60"
-            }`}
-          />
-        ))}
-      </div>
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50" />
+
+      {/* Time overlay */}
+      {showTime && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+          <p className="text-6xl md:text-7xl lg:text-8xl font-light text-white tracking-tight drop-shadow-2xl">
+            {time}
+          </p>
+          <p className="text-lg md:text-xl text-white/90 font-light mt-2 drop-shadow-lg">
+            {date}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
