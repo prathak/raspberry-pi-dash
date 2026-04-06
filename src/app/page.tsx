@@ -3,7 +3,7 @@
 import { QueryProviders } from "@/components/QueryProviders";
 import Clock from "@/components/Clock";
 import Calendar from "@/components/Calendar";
-import TodoList from "@/components/TodoList";
+import GroceryList from "@/components/GroceryList";
 import TubeSchedule from "@/components/TubeSchedule";
 import MealPlan from "@/components/MealPlan";
 import Weather from "@/components/Weather";
@@ -19,19 +19,19 @@ export default function Dashboard() {
         </header>
 
         {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Weather - Compact */}
           <div className="lg:col-span-1">
             <Weather />
           </div>
 
-          {/* Todo List */}
+          {/* Grocery List */}
           <div className="lg:col-span-1">
-            <TodoList />
+            <GroceryList />
           </div>
 
-          {/* Calendar - Full width on mobile, 2 cols on larger */}
-          <div className="md:col-span-2 lg:col-span-2">
+          {/* Calendar - Full width on mobile, spans both rows on larger */}
+          <div className="lg:col-span-2 xl:col-span-2 row-span-2">
             <Calendar />
           </div>
 
@@ -46,7 +46,7 @@ export default function Dashboard() {
           </div>
 
           {/* Photo Slideshow - Full width */}
-          <div className="md:col-span-2 lg:col-span-3 xl:col-span-2">
+          <div className="lg:col-span-4">
             <PhotoSlideshow />
           </div>
         </div>
