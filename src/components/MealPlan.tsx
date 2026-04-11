@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, UtensilsCrossed } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 interface MealPlan {
   day: string;
@@ -42,7 +42,7 @@ export default function MealPlan() {
   return (
     <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
       <div className="flex items-center gap-2 mb-2 flex-shrink-0">
-        <UtensilsCrossed className="w-5 h-5 text-orange-300" />
+        <span className="text-lg">🍽️</span>
         <h2 className="text-base font-bold bg-gradient-to-r from-orange-300 to-rose-400 bg-clip-text text-transparent">Meal Plan</h2>
       </div>
 
