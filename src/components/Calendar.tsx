@@ -83,7 +83,11 @@ export default function Calendar() {
         <div className="flex-1 flex flex-col min-h-0">
           {/* Month header */}
           <div className="flex items-center gap-2 mb-2 flex-shrink-0">
-            <span className="text-sm font-semibold text-white">
+            <span className="inline-flex flex-col items-center justify-center w-6 h-6 rounded-md bg-gradient-to-br from-sky-400 to-indigo-500 leading-none">
+              <span className="text-[5px] font-bold text-white/80 uppercase">{new Date().toLocaleDateString("en-GB", { weekday: "short" })}</span>
+              <span className="text-[10px] font-bold text-white leading-none">{new Date().getDate()}</span>
+            </span>
+            <span className="text-sm font-bold bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-transparent">
               {days[0].toLocaleDateString("en-GB", { month: "long", year: "numeric" })}
             </span>
             {days[0].getMonth() !== days[13].getMonth() && (

@@ -18,6 +18,12 @@ interface WeatherData {
     low: number;
     condition: string;
   }>;
+  hourly: Array<{
+    time: string;
+    temp: number;
+    condition: string;
+    rainChance: number;
+  }>;
 }
 
 async function fetchWeather(): Promise<WeatherData> {
@@ -26,36 +32,31 @@ async function fetchWeather(): Promise<WeatherData> {
   return res.json();
 }
 
+const getWeatherIcon = (condition: string) => {
+  const lower = condition.toLowerCase();
+  if (lower.includes("sun") || lower.includes("clear")) return "☀️";
+  if (lower.includes("cloud")) return "⛅";
+  if (lower.includes("rain") || lower.includes("drizzle") || lower.includes("shower")) return "🌧️";
+  if (lower.includes("snow")) return "❄️";
+  if (lower.includes("thunder")) return "⛈️";
+  if (lower.includes("fog") || lower.includes("mist") || lower.includes("rime")) return "🌫️";
+  return "🌤️";
+};
+
 export default function Weather() {
   const { data: weather, error, isLoading } = useQuery({
     queryKey: ["weather"],
     queryFn: fetchWeather,
-    refetchInterval: 5 * 60 * 1000, // Refresh every 5 minutes
+    refetchInterval: 5 * 60 * 1000,
   });
 
-  const getWeatherIcon = (condition: string) => {
-    const lower = condition.toLowerCase();
-    if (lower.includes("sun") || lower.includes("clear")) return "☀️";
-    if (lower.includes("cloud")) return "⛅";
-    if (lower.includes("rain")) return "🌧️";
-    if (lower.includes("snow")) return "❄️";
-    if (lower.includes("thunder")) return "⛈️";
-    if (lower.includes("fog") || lower.includes("mist")) return "🌫️";
-    return "🌤️";
-  };
-
-  // Calculate day length
   const getDayLength = () => {
     const sunrise = weather?.sunrise || "5:43";
     const sunset = weather?.sunset || "20:08";
     const [sunriseH, sunriseM] = sunrise.split(":").map(Number);
     const [sunsetH, sunsetM] = sunset.split(":").map(Number);
-    const sunriseMin = sunriseH * 60 + sunriseM;
-    const sunsetMin = sunsetH * 60 + sunsetM;
-    const diff = sunsetMin - sunriseMin;
-    const hours = Math.floor(diff / 60);
-    const mins = diff % 60;
-    return `${hours}h ${mins}m`;
+    const diff = (sunsetH * 60 + sunsetM) - (sunriseH * 60 + sunriseM);
+    return `${Math.floor(diff / 60)}h ${diff % 60}m`;
   };
 
   return (
@@ -72,8 +73,8 @@ export default function Weather() {
       )}
 
       {weather && (
-        <div className="space-y-2 flex flex-col">
-          {/* Header - Current Weather */}
+        <div className="flex flex-col gap-2">
+          {/* Current */}
           <div className="flex items-start justify-between">
             <div>
               <p className="text-5xl font-light text-white leading-tight">{Math.round(weather.temperature)}°</p>
@@ -92,7 +93,7 @@ export default function Weather() {
             <span>{weather.sunset || "20:08"}</span>
           </div>
 
-          {/* Humidity, Wind, Rain in one row */}
+          {/* Humidity, Wind, Rain */}
           <div className="flex justify-between text-xs">
             <div className="flex items-center gap-1 text-white/70">
               <Droplets className="w-3 h-3" />
@@ -108,8 +109,24 @@ export default function Weather() {
             </div>
           </div>
 
+          {/* Hourly strip — every 2 hours */}
+          {weather.hourly && weather.hourly.length > 0 && (
+            <div className="flex justify-between bg-white/5 rounded-xl px-2 py-1.5">
+              {weather.hourly.map((h, i) => (
+                <div key={i} className="flex flex-col items-center gap-0.5 min-w-[36px]">
+                  <span className="text-[10px] text-white/50 font-medium">{h.time}</span>
+                  <span className="text-sm leading-none">{getWeatherIcon(h.condition)}</span>
+                  <span className="text-[11px] text-white font-semibold tabular-nums">{h.temp}°</span>
+                  {h.rainChance > 20 && (
+                    <span className="text-[9px] text-blue-300/80">{h.rainChance}%</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* 7-Day Forecast */}
-          <div className="grid grid-cols-7 gap-1 pt-1">
+          <div className="grid grid-cols-7 gap-1">
             {weather.forecast?.slice(0, 7).map((day, index) => (
               <div
                 key={index}

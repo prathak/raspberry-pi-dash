@@ -17,9 +17,7 @@ interface TubeDeparture {
   station: string;
   line: string;
   destination: string;
-  time: string;
-  timeToStationSecs: number;
-  isDelayed?: boolean;
+  times: number[]; // timeToStation in seconds for next 4 trains
 }
 
 // TfL API endpoints
@@ -48,14 +46,12 @@ async function fetchTfLData(url: string): Promise<TfLArrival[]> {
   }
 }
 
-function parseTimeToStation(seconds: number): string {
-  if (seconds === 0) return "Due";
-  if (seconds < 30) return "Due";
-  if (seconds < 60) return `${seconds}s`;
-
-  const minutes = Math.round(seconds / 60);
-  if (minutes === 1) return "1 min";
-  return `${minutes} min`;
+function cleanDestination(name: string): string {
+  return name
+    .replace(/\s*(DLR|Underground|Rail|London Overground)\s*Station/gi, "")
+    .replace(/\s*Terminal\s*\d+/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function normalizeLineName(lineName: string): string {
@@ -64,7 +60,7 @@ function normalizeLineName(lineName: string): string {
     "district": "District",
     "hammersmith-city": "Hammersmith & City",
     "jubilee": "Jubilee",
-    "elizabeth": "Elizabeth",
+    "elizabeth": "Elizabeth line",
     "dlr": "DLR",
     "london-overground": "Overground",
   };
@@ -77,18 +73,15 @@ export async function GET(request: Request) {
     fetchTfLData(STRATFORD_INTL_API),
   ]);
 
-  const departures: TubeDeparture[] = [
-    // Stratford International: DLR only - show first 2
+  const allArrivals = [
+    // Stratford International: DLR only
     ...stratfordIntlArrivals
       .filter((arrival) => arrival.lineName.toLowerCase() === "dlr")
-      .slice(0, 2)
       .map((arrival) => ({
         station: "Stratford Int'l",
         line: normalizeLineName(arrival.lineName),
-        destination: arrival.destinationName,
-        time: parseTimeToStation(arrival.timeToStation),
+        destination: cleanDestination(arrival.destinationName),
         timeToStationSecs: arrival.timeToStation,
-        isDelayed: arrival.timeToStation > 120,
       })),
     // Stratford: Elizabeth line towards Paddington or Heathrow only (outbound)
     ...stratfordArrivals
@@ -101,20 +94,44 @@ export async function GET(request: Request) {
       .map((arrival) => ({
         station: "Stratford",
         line: normalizeLineName(arrival.lineName),
-        destination: arrival.destinationName,
-        time: parseTimeToStation(arrival.timeToStation),
+        destination: cleanDestination(arrival.destinationName),
         timeToStationSecs: arrival.timeToStation,
-        isDelayed: arrival.timeToStation > 120,
       })),
   ];
 
-  // Sort: Stratford Int'l first, then by time
-  departures.sort((a, b) => {
+  // Sort by time within each group
+  allArrivals.sort((a, b) => a.timeToStationSecs - b.timeToStationSecs);
+
+  // Group by (station, line, destination) and collect up to 4 times
+  // For Elizabeth line, only include times > 10 min (600s)
+  const ELIZABETH_MIN_SECS = 600;
+  const groupMap = new Map<string, TubeDeparture>();
+  for (const arrival of allArrivals) {
+    const key = `${arrival.station}|${arrival.line}|${arrival.destination}`;
+    // Skip Elizabeth line times under 10 min
+    if (arrival.line === "Elizabeth line" && arrival.timeToStationSecs < ELIZABETH_MIN_SECS) continue;
+    const existing = groupMap.get(key);
+    if (existing) {
+      if (existing.times.length < 4) {
+        existing.times.push(arrival.timeToStationSecs);
+      }
+    } else {
+      groupMap.set(key, {
+        station: arrival.station,
+        line: arrival.line,
+        destination: arrival.destination,
+        times: [arrival.timeToStationSecs],
+      });
+    }
+  }
+
+  // Sort groups: Stratford Int'l first, then by soonest time
+  const departures = Array.from(groupMap.values()).sort((a, b) => {
     if (a.station !== b.station) {
       return a.station === "Stratford Int'l" ? -1 : 1;
     }
-    return a.timeToStationSecs - b.timeToStationSecs;
+    return a.times[0] - b.times[0];
   });
 
-  return NextResponse.json(departures.slice(0, 10));
+  return NextResponse.json(departures.slice(0, 6));
 }

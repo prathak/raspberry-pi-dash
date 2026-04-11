@@ -1,14 +1,8 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
-// Mock data - should be imported from a shared store
-let mockTodos: Array<{
-  id: string;
-  content: string;
-  completed: boolean;
-  priority?: string;
-  dueDate?: string;
-}> = [];
+const TODOIST_API_KEY = process.env.TODOIST_API_KEY;
+const TODOIST_BASE = "https://api.todoist.com/api/v1";
 
 export async function PATCH(
   request: NextRequest,
@@ -17,17 +11,31 @@ export async function PATCH(
   const { id } = await params;
   const body = await request.json();
 
-  // In production, fetch from database
-  // For now, use a simple in-memory store simulation
-  const todo = mockTodos.find((t) => t.id === id) || {
-    id,
-    content: "Todo item",
-    completed: false,
-  };
+  try {
+    const endpoint = body.completed
+      ? `${TODOIST_BASE}/tasks/${id}/close`
+      : `${TODOIST_BASE}/tasks/${id}/reopen`;
 
-  todo.completed = body.completed;
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${TODOIST_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-  return NextResponse.json(todo);
+    if (!res.ok) {
+      throw new Error(`Todoist API error: ${res.status}`);
+    }
+
+    return NextResponse.json({ id, completed: body.completed });
+  } catch (error) {
+    console.error("Failed to toggle task:", error);
+    return NextResponse.json(
+      { error: "Failed to toggle task" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE(
@@ -35,6 +43,25 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  // In production, delete from database
-  return NextResponse.json({ success: true });
+
+  try {
+    const res = await fetch(`${TODOIST_BASE}/tasks/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${TODOIST_API_KEY}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Todoist API error: ${res.status}`);
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+    return NextResponse.json(
+      { error: "Failed to delete task" },
+      { status: 500 }
+    );
+  }
 }
