@@ -1,7 +1,19 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, Droplets, Wind } from "lucide-react";
+import {
+  AlertCircle,
+  Cloud,
+  CloudDrizzle,
+  CloudFog,
+  CloudLightning,
+  CloudRain,
+  CloudSnow,
+  CloudSun,
+  Droplets,
+  Sun,
+  Wind,
+} from "lucide-react";
 
 interface WeatherData {
   temperature: number;
@@ -34,13 +46,13 @@ async function fetchWeather(): Promise<WeatherData> {
 
 const getWeatherIcon = (condition: string) => {
   const lower = condition.toLowerCase();
-  if (lower.includes("sun") || lower.includes("clear")) return "☀️";
-  if (lower.includes("cloud")) return "⛅";
-  if (lower.includes("rain") || lower.includes("drizzle") || lower.includes("shower")) return "🌧️";
-  if (lower.includes("snow")) return "❄️";
-  if (lower.includes("thunder")) return "⛈️";
-  if (lower.includes("fog") || lower.includes("mist") || lower.includes("rime")) return "🌫️";
-  return "🌤️";
+  if (lower.includes("sun") || lower.includes("clear")) return <Sun className="w-6 h-6 text-yellow-300" />;
+  if (lower.includes("cloud")) return <Cloud className="w-6 h-6 text-gray-300" />;
+  if (lower.includes("rain") || lower.includes("drizzle") || lower.includes("shower")) return <CloudRain className="w-6 h-6 text-blue-300" />;
+  if (lower.includes("snow")) return <CloudSnow className="w-6 h-6 text-blue-200" />;
+  if (lower.includes("thunder")) return <CloudLightning className="w-6 h-6 text-yellow-400" />;
+  if (lower.includes("fog") || lower.includes("mist") || lower.includes("rime")) return <CloudFog className="w-6 h-6 text-gray-400" />;
+  return <CloudSun className="w-6 h-6 text-yellow-200" />;
 };
 
 export default function Weather() {
@@ -81,7 +93,7 @@ export default function Weather() {
               <p className="text-base text-white/90 font-medium">{weather.condition}</p>
               <p className="text-sm text-white/60">{weather.location}</p>
             </div>
-            <span className="text-5xl">{getWeatherIcon(weather.condition)}</span>
+            <span className="text-5xl flex items-center justify-center">{getWeatherIcon(weather.condition)}</span>
           </div>
 
           {/* Sunrise/Sunset */}
@@ -104,7 +116,7 @@ export default function Weather() {
               <span>{weather.windSpeed || 12} km/h</span>
             </div>
             <div className="flex items-center gap-1 text-white/70">
-              <span>🌧️</span>
+              <CloudRain className="w-3 h-3" />
               <span>{weather.rainChance || 20}%</span>
             </div>
           </div>
@@ -115,7 +127,7 @@ export default function Weather() {
               {weather.hourly.map((h, i) => (
                 <div key={i} className="flex flex-col items-center gap-0.5 min-w-[36px]">
                   <span className="text-[10px] text-white/50 font-medium">{h.time}</span>
-                  <span className="text-sm leading-none">{getWeatherIcon(h.condition)}</span>
+                  <span className="text-sm leading-none flex items-center justify-center">{getWeatherIcon(h.condition)}</span>
                   <span className="text-[11px] text-white font-semibold tabular-nums">{h.temp}°</span>
                   {h.rainChance > 20 && (
                     <span className="text-[9px] text-blue-300/80">{h.rainChance}%</span>
@@ -135,7 +147,7 @@ export default function Weather() {
                 }`}
               >
                 <span className="text-[10px] text-white/50 uppercase">{day.day}</span>
-                <span className="text-lg">{getWeatherIcon(day.condition)}</span>
+                <span className="text-lg flex items-center justify-center">{getWeatherIcon(day.condition)}</span>
                 <div className="flex gap-0.5 text-[10px]">
                   <span className="text-white font-medium">{Math.round(day.high)}°</span>
                   <span className="text-white/50">{Math.round(day.low)}°</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Circle, CheckCircle2, AlertCircle } from "lucide-react";
+import { Circle, CheckCircle2, AlertCircle, ShoppingCart } from "lucide-react";
 
 interface Task {
   id: string;
@@ -80,7 +80,7 @@ export default function GroceryList() {
   return (
     <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
       <div className="flex items-center gap-2 mb-2 flex-shrink-0">
-        <span className="text-lg">🛒</span>
+        <ShoppingCart className="w-5 h-5 text-emerald-300" />
         <h2 className="text-base font-bold bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent">Grocery List</h2>
         {activeTasks.length > 0 && (
           <span className="text-xs text-white/40 ml-auto">{activeTasks.length} left</span>

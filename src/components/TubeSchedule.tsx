@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { TrainFront } from "lucide-react";
 
 interface TubeDeparture {
   station: string;
@@ -57,7 +58,7 @@ export default function TubeSchedule() {
   return (
     <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
       <div className="flex items-center gap-2 mb-2 flex-shrink-0">
-        <span className="text-lg">🚇</span>
+        <TrainFront className="w-5 h-5 text-blue-300" />
         <h2 className="text-base font-bold bg-gradient-to-r from-blue-300 to-violet-400 bg-clip-text text-transparent">Tube Departures</h2>
       </div>
 
