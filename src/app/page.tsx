@@ -19,18 +19,18 @@ export default function Dashboard() {
             <Clock showDate={true} />
           </div>
 
-          {/* Weather row - 50% of available space */}
-          <div className="flex-1 mb-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 h-full">
-              <div className="h-full"><Weather /></div>
-              <div className="h-full"><GroceryList /></div>
-              <div className="h-full"><TubeSchedule /></div>
-              <div className="h-full"><MealPlan /></div>
+          {/* Widgets row */}
+          <div className="mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              <Weather />
+              <GroceryList />
+              <TubeSchedule />
+              <MealPlan />
             </div>
           </div>
 
-          {/* Calendar - 40% of 90vh */}
-          <div className="h-[36vh]">
+          {/* Calendar */}
+          <div className="h-[35vh]">
             <Calendar />
           </div>
         </div>

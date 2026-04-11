@@ -59,7 +59,7 @@ export default function Weather() {
   };
 
   return (
-    <div className="glass-card p-4 h-full pointer-events-none">
+    <div className="glass-card p-3 h-full pointer-events-none flex flex-col">
       {isLoading && (
         <div className="text-white/60 text-center py-4">Loading...</div>
       )}
@@ -72,56 +72,54 @@ export default function Weather() {
       )}
 
       {weather && (
-        <div className="space-y-4">
+        <div className="space-y-2 flex flex-col">
           {/* Header - Current Weather */}
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-5xl font-light text-white">{Math.round(weather.temperature)}°</p>
+              <p className="text-5xl font-light text-white leading-tight">{Math.round(weather.temperature)}°</p>
               <p className="text-base text-white/90 font-medium">{weather.condition}</p>
               <p className="text-sm text-white/60">{weather.location}</p>
             </div>
-            <span className="text-6xl">{getWeatherIcon(weather.condition)}</span>
+            <span className="text-5xl">{getWeatherIcon(weather.condition)}</span>
           </div>
 
           {/* Sunrise/Sunset */}
-          <div className="flex items-center gap-2 bg-white/5 rounded-full px-3 py-2 text-xs text-white/80 justify-center">
-            <span className="text-xs">{weather.sunrise || "5:43"}</span>
-            <span className="text-white/30 text-xs">—</span>
-            <span className="text-xs">{getDayLength()}</span>
-            <span className="text-white/30 text-xs">—</span>
-            <span className="text-xs">{weather.sunset || "20:08"}</span>
+          <div className="flex items-center gap-2 bg-white/5 rounded-full px-3 py-1 text-xs text-white/80 justify-center">
+            <span>{weather.sunrise || "5:43"}</span>
+            <span className="text-white/30">—</span>
+            <span>{getDayLength()}</span>
+            <span className="text-white/30">—</span>
+            <span>{weather.sunset || "20:08"}</span>
           </div>
 
-          {/* Rain Chance */}
-          <div className="flex items-center justify-center gap-2 bg-white/10 rounded-full px-3 py-2 text-sm text-white/90">
-            <span className="text-lg">🌧️</span>
-            <span className="text-sm">Rain: {weather.rainChance || 20}%</span>
-          </div>
-
-          {/* Humidity and Wind */}
+          {/* Humidity, Wind, Rain in one row */}
           <div className="flex justify-between text-xs">
-            <div className="flex items-center gap-2 text-white/70">
+            <div className="flex items-center gap-1 text-white/70">
               <Droplets className="w-3 h-3" />
-              <span>Humidity: {weather.humidity || 65}%</span>
+              <span>{weather.humidity || 65}%</span>
             </div>
-            <div className="flex items-center gap-2 text-white/70">
+            <div className="flex items-center gap-1 text-white/70">
               <Wind className="w-3 h-3" />
-              <span>Wind: {weather.windSpeed || 12} km/h</span>
+              <span>{weather.windSpeed || 12} km/h</span>
+            </div>
+            <div className="flex items-center gap-1 text-white/70">
+              <span>🌧️</span>
+              <span>{weather.rainChance || 20}%</span>
             </div>
           </div>
 
           {/* 7-Day Forecast */}
-          <div className="grid grid-cols-7 gap-2 pt-2">
+          <div className="grid grid-cols-7 gap-1 pt-1">
             {weather.forecast?.slice(0, 7).map((day, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center gap-1.5 p-1.5 rounded-lg ${
+                className={`flex flex-col items-center gap-0.5 p-1 rounded-lg ${
                   index === 0 ? "bg-white/15" : "bg-white/5"
                 }`}
               >
-                <span className="text-xs text-white/50 uppercase">{day.day}</span>
-                <span className="text-2xl">{getWeatherIcon(day.condition)}</span>
-                <div className="flex gap-1 text-xs">
+                <span className="text-[10px] text-white/50 uppercase">{day.day}</span>
+                <span className="text-lg">{getWeatherIcon(day.condition)}</span>
+                <div className="flex gap-0.5 text-[10px]">
                   <span className="text-white font-medium">{Math.round(day.high)}°</span>
                   <span className="text-white/50">{Math.round(day.low)}°</span>
                 </div>

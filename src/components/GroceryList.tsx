@@ -33,37 +33,37 @@ export default function GroceryList() {
   };
 
   return (
-    <div className="glass-card p-6 h-full flex flex-col overflow-hidden">
-      <div className="flex items-center gap-3 mb-4 flex-shrink-0">
-        <CheckCircle2 className="w-6 h-6 text-white/80" />
-        <h2 className="text-xl font-semibold text-white">Grocery List</h2>
+    <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
+      <div className="flex items-center gap-2 mb-2 flex-shrink-0">
+        <CheckCircle2 className="w-4 h-4 text-white/80" />
+        <h2 className="text-base font-semibold text-white">Grocery List</h2>
       </div>
 
       {isLoading && (
-        <div className="text-white/60 text-center py-8">Loading groceries...</div>
+        <div className="text-white/60 text-center py-4 text-sm">Loading...</div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 text-red-400 py-4">
-          <AlertCircle className="w-5 h-5" />
-          <span>Failed to load groceries</span>
+        <div className="flex items-center gap-2 text-red-400 py-2">
+          <AlertCircle className="w-4 h-4" />
+          <span className="text-sm">Failed to load</span>
         </div>
       )}
 
       {!isLoading && !error && (
-        <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2">
+        <div className="overflow-y-auto custom-scrollbar space-y-1">
           {groceryItems.map((item) => (
             <div
               key={item.id}
-              className={`flex items-center gap-3 p-3 rounded-lg bg-white/5 ${
+              className={`flex items-center gap-2 p-1.5 rounded-lg bg-white/5 ${
                 item.completed ? "opacity-50" : ""
               }`}
             >
               <div className="flex-shrink-0">
                 {item.completed ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-400" />
+                  <CheckCircle2 className="w-4 h-4 text-green-400" />
                 ) : (
-                  <CheckCircle2 className="w-5 h-5 text-white/40" />
+                  <CheckCircle2 className="w-4 h-4 text-white/40" />
                 )}
               </div>
               <span
@@ -81,7 +81,7 @@ export default function GroceryList() {
             </div>
           ))}
           {groceryItems.length === 0 && (
-            <div className="text-white/60 text-center py-8">No groceries</div>
+            <div className="text-white/60 text-center py-4 text-sm">No groceries</div>
           )}
         </div>
       )}

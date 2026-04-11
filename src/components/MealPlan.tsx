@@ -32,7 +32,7 @@ export default function MealPlan() {
 
   const MealItem = ({ label, meal }: { label: string; meal?: string }) => (
     meal ? (
-      <div className="flex justify-between items-center py-1 border-b border-white/10 last:border-0">
+      <div className="flex justify-between items-center py-0.5 border-b border-white/10 last:border-0">
         <span className="text-[10px] text-white/50 uppercase">{label}</span>
         <span className="text-white text-sm truncate">{meal}</span>
       </div>
@@ -62,10 +62,10 @@ export default function MealPlan() {
       )}
 
       {!isLoading && !error && meals.length > 0 && (
-        <div className="space-y-2 overflow-y-auto flex-1 custom-scrollbar">
+        <div className="space-y-1.5 overflow-y-auto custom-scrollbar">
           {/* Today */}
           <div className="rounded-lg bg-white/5 p-2">
-            <p className="text-xs text-white/80 font-semibold mb-1 flex items-center gap-2">
+            <p className="text-xs text-white/80 font-semibold mb-0.5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
               Today ({days[currentDayIndex]})
             </p>
@@ -79,7 +79,7 @@ export default function MealPlan() {
 
           {/* Tomorrow */}
           <div className="rounded-lg bg-white/5 p-2">
-            <p className="text-xs text-white/80 font-semibold mb-1">
+            <p className="text-xs text-white/80 font-semibold mb-0.5">
               Tomorrow ({days[tomorrowIndex]})
             </p>
             <MealItem label="Breakfast" meal={tomorrowMeal.breakfast} />

@@ -80,8 +80,8 @@ export default function TubeSchedule() {
         <div className="text-white/60 text-center py-4 text-sm">No departures</div>
       )}
 
-      <div className="space-y-2 overflow-y-auto flex-1 custom-scrollbar">
-        {departures.slice(0, 8).map((departure, index) => (
+      <div className="space-y-1 overflow-y-auto custom-scrollbar">
+        {departures.slice(0, 4).map((departure, index) => (
           <div
             key={`${departure.station}-${departure.line}-${departure.destination}-${index}`}
             className="flex items-center gap-2 p-1.5 rounded"
