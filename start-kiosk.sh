@@ -22,4 +22,5 @@ chromium-browser \
   --disable-features=TranslateUI \
   --disable-pinch \
   --overscroll-history-navigation=0 \
+  --disable-session-crashed-bubble \
   "$URL"
