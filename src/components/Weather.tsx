@@ -60,32 +60,32 @@ export default function Weather() {
   };
 
   return (
-    <div className="glass-card p-3 h-full pointer-events-none flex flex-col">
+    <div className="glass-card p-4 h-full pointer-events-none flex flex-col">
       {isLoading && (
         <div className="text-white/60 text-center py-4">Loading...</div>
       )}
 
       {error && (
         <div className="flex items-center gap-2 text-red-400 py-4">
-          <AlertCircle className="w-4 h-4" />
-          <span className="text-sm">Failed to load weather</span>
+          <AlertCircle className="w-5 h-5" />
+          <span className="text-base">Failed to load weather</span>
         </div>
       )}
 
       {weather && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {/* Current */}
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-5xl font-light text-white leading-tight">{Math.round(weather.temperature)}°</p>
-              <p className="text-base text-white/90 font-medium">{weather.condition}</p>
-              <p className="text-sm text-white/60">{weather.location}</p>
+              <p className="text-6xl font-semibold text-white leading-tight drop-shadow-md">{Math.round(weather.temperature)}°</p>
+              <p className="text-lg text-white/90 font-semibold">{weather.condition}</p>
+              <p className="text-base text-white/70 font-medium">{weather.location}</p>
             </div>
-            <span className="text-5xl">{getWeatherIcon(weather.condition)}</span>
+            <span className="text-6xl">{getWeatherIcon(weather.condition)}</span>
           </div>
 
           {/* Sunrise/Sunset */}
-          <div className="flex items-center gap-2 bg-white/5 rounded-full px-3 py-1 text-xs text-white/80 justify-center">
+          <div className="flex items-center gap-2 bg-white/5 rounded-full px-3 py-1.5 text-sm text-white/80 font-medium justify-center">
             <span>{weather.sunrise || "5:43"}</span>
             <span className="text-white/30">—</span>
             <span>{getDayLength()}</span>
@@ -94,16 +94,16 @@ export default function Weather() {
           </div>
 
           {/* Humidity, Wind, Rain */}
-          <div className="flex justify-between text-xs">
-            <div className="flex items-center gap-1 text-white/70">
-              <Droplets className="w-3 h-3" />
+          <div className="flex justify-between text-sm font-semibold">
+            <div className="flex items-center gap-1.5 text-white/80">
+              <Droplets className="w-4 h-4" />
               <span>{weather.humidity || 65}%</span>
             </div>
-            <div className="flex items-center gap-1 text-white/70">
-              <Wind className="w-3 h-3" />
+            <div className="flex items-center gap-1.5 text-white/80">
+              <Wind className="w-4 h-4" />
               <span>{weather.windSpeed || 12} km/h</span>
             </div>
-            <div className="flex items-center gap-1 text-white/70">
+            <div className="flex items-center gap-1.5 text-white/80">
               <span>🌧️</span>
               <span>{weather.rainChance || 20}%</span>
             </div>
@@ -111,14 +111,14 @@ export default function Weather() {
 
           {/* Hourly strip — every 2 hours */}
           {weather.hourly && weather.hourly.length > 0 && (
-            <div className="flex justify-between bg-white/5 rounded-xl px-2 py-1.5">
+            <div className="flex justify-between bg-white/5 rounded-xl px-2 py-2">
               {weather.hourly.map((h, i) => (
-                <div key={i} className="flex flex-col items-center gap-0.5 min-w-[36px]">
-                  <span className="text-[10px] text-white/50 font-medium">{h.time}</span>
-                  <span className="text-sm leading-none">{getWeatherIcon(h.condition)}</span>
-                  <span className="text-[11px] text-white font-semibold tabular-nums">{h.temp}°</span>
+                <div key={i} className="flex flex-col items-center gap-0.5 min-w-[40px]">
+                  <span className="text-xs text-white/60 font-semibold">{h.time}</span>
+                  <span className="text-xl leading-none">{getWeatherIcon(h.condition)}</span>
+                  <span className="text-sm text-white font-bold tabular-nums">{h.temp}°</span>
                   {h.rainChance > 20 && (
-                    <span className="text-[9px] text-blue-300/80">{h.rainChance}%</span>
+                    <span className="text-[10px] text-blue-300/80 font-medium">{h.rainChance}%</span>
                   )}
                 </div>
               ))}
@@ -130,15 +130,15 @@ export default function Weather() {
             {weather.forecast?.slice(0, 7).map((day, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center gap-0.5 p-1 rounded-lg ${
+                className={`flex flex-col items-center gap-0.5 p-1.5 rounded-lg ${
                   index === 0 ? "bg-white/15" : "bg-white/5"
                 }`}
               >
-                <span className="text-[10px] text-white/50 uppercase">{day.day}</span>
-                <span className="text-lg">{getWeatherIcon(day.condition)}</span>
-                <div className="flex gap-0.5 text-[10px]">
-                  <span className="text-white font-medium">{Math.round(day.high)}°</span>
-                  <span className="text-white/50">{Math.round(day.low)}°</span>
+                <span className="text-xs text-white/60 font-semibold uppercase">{day.day}</span>
+                <span className="text-2xl">{getWeatherIcon(day.condition)}</span>
+                <div className="flex gap-0.5 text-xs font-semibold">
+                  <span className="text-white">{Math.round(day.high)}°</span>
+                  <span className="text-white/60">{Math.round(day.low)}°</span>
                 </div>
               </div>
             ))}

@@ -32,61 +32,61 @@ export default function MealPlan() {
 
   const MealItem = ({ label, meal }: { label: string; meal?: string }) => (
     meal ? (
-      <div className="flex justify-between items-center py-1 border-b border-white/10 last:border-0">
-        <span className="text-[11px] text-white/50 uppercase tracking-wide">{label}</span>
-        <span className="text-white text-[15px] truncate">{meal}</span>
+      <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-0">
+        <span className="text-xs text-white/60 uppercase tracking-wide font-semibold">{label}</span>
+        <span className="text-white text-base font-semibold truncate">{meal}</span>
       </div>
     ) : null
   );
 
   return (
-    <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
-      <div className="flex items-center gap-2 mb-2 flex-shrink-0">
-        <span className="text-lg">🍽️</span>
-        <h2 className="text-base font-bold bg-gradient-to-r from-orange-300 to-rose-400 bg-clip-text text-transparent">Meal Plan</h2>
+    <div className="glass-card p-4 h-full flex flex-col overflow-hidden">
+      <div className="flex items-center gap-2 mb-3 flex-shrink-0">
+        <span className="text-2xl">🍽️</span>
+        <h2 className="text-lg font-bold bg-gradient-to-r from-orange-300 to-rose-400 bg-clip-text text-transparent">Meal Plan</h2>
       </div>
 
       {isLoading && (
-        <div className="text-white/60 text-center py-4 text-xs">Loading...</div>
+        <div className="text-white/60 text-center py-4 text-sm">Loading...</div>
       )}
 
       {error && (
         <div className="flex items-center gap-2 text-red-400 py-2">
-          <AlertCircle className="w-3 h-3" />
-          <span className="text-xs">Failed to load</span>
+          <AlertCircle className="w-4 h-4" />
+          <span className="text-sm">Failed to load</span>
         </div>
       )}
 
       {!isLoading && !error && meals.length === 0 && (
-        <div className="text-white/60 text-center py-4 text-xs">No meal plan</div>
+        <div className="text-white/60 text-center py-4 text-sm">No meal plan</div>
       )}
 
       {!isLoading && !error && meals.length > 0 && (
-        <div className="space-y-2 overflow-y-auto custom-scrollbar">
+        <div className="space-y-2.5 overflow-y-auto custom-scrollbar">
           {/* Today */}
-          <div className="rounded-lg bg-white/5 p-2.5">
-            <p className="text-sm text-white/80 font-semibold mb-1 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+          <div className="rounded-lg bg-white/5 p-3">
+            <p className="text-base text-white/80 font-semibold mb-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-400" />
               Today ({days[currentDayIndex]})
             </p>
             <MealItem label="Breakfast" meal={todayMeal.breakfast} />
             <MealItem label="Lunch" meal={todayMeal.lunch} />
             <MealItem label="Dinner" meal={todayMeal.dinner} />
             {!todayMeal.breakfast && !todayMeal.lunch && !todayMeal.dinner && (
-              <p className="text-white/40 text-sm">No meals planned</p>
+              <p className="text-white/40 text-base">No meals planned</p>
             )}
           </div>
 
           {/* Tomorrow */}
-          <div className="rounded-lg bg-white/5 p-2.5">
-            <p className="text-sm text-white/80 font-semibold mb-1">
+          <div className="rounded-lg bg-white/5 p-3">
+            <p className="text-base text-white/80 font-semibold mb-1">
               Tomorrow ({days[tomorrowIndex]})
             </p>
             <MealItem label="Breakfast" meal={tomorrowMeal.breakfast} />
             <MealItem label="Lunch" meal={tomorrowMeal.lunch} />
             <MealItem label="Dinner" meal={tomorrowMeal.dinner} />
             {!tomorrowMeal.breakfast && !tomorrowMeal.lunch && !tomorrowMeal.dinner && (
-              <p className="text-white/40 text-sm">No meals planned</p>
+              <p className="text-white/40 text-base">No meals planned</p>
             )}
           </div>
         </div>

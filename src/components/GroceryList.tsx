@@ -78,23 +78,23 @@ export default function GroceryList() {
   const completedTasks = tasks.filter((t) => t.completed);
 
   return (
-    <div className="glass-card p-3 h-full flex flex-col overflow-hidden">
-      <div className="flex items-center gap-2 mb-2 flex-shrink-0">
-        <span className="text-lg">🛒</span>
-        <h2 className="text-base font-bold bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent">Grocery List</h2>
+    <div className="glass-card p-4 h-full flex flex-col overflow-hidden">
+      <div className="flex items-center gap-2 mb-3 flex-shrink-0">
+        <span className="text-2xl">🛒</span>
+        <h2 className="text-lg font-bold bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent">Grocery List</h2>
         {activeTasks.length > 0 && (
-          <span className="text-xs text-white/40 ml-auto">{activeTasks.length} left</span>
+          <span className="text-sm text-white/40 ml-auto">{activeTasks.length} left</span>
         )}
       </div>
 
       {isLoading && (
-        <div className="text-white/60 text-center py-4 text-sm">Loading...</div>
+        <div className="text-white/60 text-center py-4 text-base">Loading...</div>
       )}
 
       {error && (
         <div className="flex items-center gap-2 text-red-400 py-2">
-          <AlertCircle className="w-4 h-4" />
-          <span className="text-sm">Failed to load</span>
+          <AlertCircle className="w-5 h-5" />
+          <span className="text-base">Failed to load</span>
         </div>
       )}
 
@@ -107,10 +107,10 @@ export default function GroceryList() {
                 onClick={() =>
                   toggleMutation.mutate({ id: item.id, completed: true })
                 }
-                className="flex items-center gap-1.5 py-0.5 text-left hover:bg-white/10 rounded transition-colors"
+                className="flex items-center gap-1.5 py-1 text-left hover:bg-white/10 rounded transition-colors"
               >
-                <Circle className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
-                <span className="text-white text-[15px] truncate">{item.content}</span>
+                <Circle className="w-4 h-4 text-white/30 flex-shrink-0" />
+                <span className="text-white text-base font-semibold truncate">{item.content}</span>
               </button>
             ))}
             {completedTasks.map((item) => (
@@ -119,15 +119,15 @@ export default function GroceryList() {
                 onClick={() =>
                   toggleMutation.mutate({ id: item.id, completed: false })
                 }
-                className="flex items-center gap-1.5 py-0.5 text-left hover:bg-white/10 rounded transition-colors opacity-40"
+                className="flex items-center gap-1.5 py-1 text-left hover:bg-white/10 rounded transition-colors opacity-40"
               >
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-400 flex-shrink-0" />
-                <span className="text-white/50 text-[15px] truncate line-through">{item.content}</span>
+                <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                <span className="text-white/50 text-base font-semibold truncate line-through">{item.content}</span>
               </button>
             ))}
           </div>
           {tasks.length === 0 && (
-            <div className="text-white/60 text-center py-4 text-sm">No groceries</div>
+            <div className="text-white/60 text-center py-4 text-base">No groceries</div>
           )}
         </div>
       )}

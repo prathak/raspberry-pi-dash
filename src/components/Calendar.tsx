@@ -87,11 +87,11 @@ export default function Calendar() {
               <span className="text-[5px] font-bold text-white/80 uppercase">{new Date().toLocaleDateString("en-GB", { weekday: "short" })}</span>
               <span className="text-[10px] font-bold text-white leading-none">{new Date().getDate()}</span>
             </span>
-            <span className="text-sm font-bold bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-transparent">
+            <span className="text-sm font-extrabold bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-transparent">
               {days[0].toLocaleDateString("en-GB", { month: "long", year: "numeric" })}
             </span>
             {days[0].getMonth() !== days[13].getMonth() && (
-              <span className="text-sm font-semibold text-white/40">
+              <span className="text-sm font-semibold text-white/50">
                 / {days[13].toLocaleDateString("en-GB", { month: "long" })}
               </span>
             )}
@@ -100,7 +100,7 @@ export default function Calendar() {
           {/* Day header row */}
           <div className="grid grid-cols-7 divide-x divide-white/10 border-b border-white/15">
             {dayNames.map((name) => (
-              <div key={name} className="py-1.5 text-center text-xs font-medium text-white/50">
+              <div key={name} className="py-1 text-center text-xs font-semibold text-white/60">
                 {name}
               </div>
             ))}
@@ -126,7 +126,7 @@ export default function Calendar() {
                     >
                       {/* Date number */}
                       <div className="flex items-center justify-center mb-1">
-                        <span className={`text-xs font-medium flex items-center justify-center rounded-full w-6 h-6 ${today ? "bg-white text-black" : "text-white/60"}`}>
+                        <span className={`text-xs font-semibold flex items-center justify-center rounded-full w-6 h-6 ${today ? "bg-white text-black" : "text-white/80"}`}>
                           {day.getDate()}
                         </span>
                       </div>
@@ -139,16 +139,16 @@ export default function Calendar() {
                           return (
                             <div
                               key={event.id}
-                              className={`${color.border} ${color.bg} border rounded px-1.5 py-0.5 truncate cursor-default`}
+                              className={`${color.border} ${color.bg} border rounded px-1.5 py-0.5 cursor-default`}
                             >
-                              <span className={`text-[10px] font-medium ${color.text} truncate block`}>
+                              <span className={`text-sm font-semibold ${color.text} break-words line-clamp-2`}>
                                 {isAllDay ? event.title : `${formatTime(event.start)} ${event.title}`}
                               </span>
                             </div>
                           );
                         })}
                         {moreCount > 0 && (
-                          <span className="text-[10px] text-white/40">+{moreCount} more</span>
+                          <span className="text-xs text-white/50 font-medium">+{moreCount} more</span>
                         )}
                       </div>
                     </div>
